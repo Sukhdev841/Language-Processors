@@ -7,7 +7,7 @@
 [ \t\n] ;
 [+]  return add;
 [;] return sem;
-[-*/()] {return yytext[0];}
+[-*/()%] {return yytext[0];}
 [&]	return AND;
 [|] return OR;
 [~] return NOT;
