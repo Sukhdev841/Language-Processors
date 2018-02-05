@@ -1,0 +1,4 @@
+3
+E->EA|T|EB|C
+T->a
+C->Cc|N
