@@ -5,7 +5,7 @@
 int to_decimal(char *hex_num);
 void to_hex(int,char*);
 %}
-%token add sem AND OR NOT
+%token add sem
 %union {int a_number;}
 %start lines
 %token <a_number> number
@@ -34,12 +34,6 @@ factor2:factor            {$$=$1;}
     								}
     	| factor2 '%' factor {
     												$$ = $1%$3;
-    								}
-    	| factor2 AND factor {
-    												$$ = $1 & $3;
-    								}
-    	| factor2 OR factor {
-    												$$ = $1 | $3;
     								}
 			;
 factor: number        {$$=$1;}

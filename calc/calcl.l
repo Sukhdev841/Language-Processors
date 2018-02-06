@@ -7,9 +7,6 @@
 [+]  return add;
 [;] return sem;
 [-*/()%] {return yytext[0];}
-[&]	return AND;
-[|] return OR;
-[~] return NOT;
 . {ECHO; yyerror("unexpected character");}
 %%
 int yywrap(){
