@@ -1,0 +1,2 @@
+A -> a | b | b A
+A -> a B | a a C | a a a D | b X | b b Y | b b b Z

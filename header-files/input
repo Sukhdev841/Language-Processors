@@ -1,0 +1,5 @@
+3
+A->A B|B C
+B->B b|d
+C->C c|e
+c
