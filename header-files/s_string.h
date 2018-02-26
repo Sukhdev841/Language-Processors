@@ -8,6 +8,7 @@ string get_ith_part(string, int, char);
 void reverse(char, int);
 char* itoa(int, char*, int);
 string itos(int);
+string remove_extra_spaces(string);
 
 vector<string> get_parts(string str,char delimeter)
 {
@@ -113,4 +114,28 @@ string itos(int num)
   char* str = new char[100];
   itoa(num,str,10);
   return string(str);
+}
+
+string remove_extra_spaces(string str)
+{
+  string temp = "";
+  bool flag = false;
+  for(int i=0;i<str.length();i++)
+  {
+    if(str[i] == ' ' && flag)
+      continue;
+    if(str[i] == ' ' && ! flag)
+    {
+      temp += ' ';
+      flag = true;
+      continue;
+    }
+    temp += str[i];
+    flag = false;
+  }
+  while(temp[0]==' ')
+    temp = temp.substr(1,temp.length());
+  while(temp[temp.length()-1]==' ')
+    temp = temp.substr(0,temp.length()-1);
+  return temp;
 }

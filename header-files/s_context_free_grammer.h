@@ -52,6 +52,7 @@ public:
 
     void extract(string production)
     {
+      production = remove_extra_spaces(production);
       right_variables.clear();
       right_parts.clear();
       left_side = "";
@@ -68,10 +69,7 @@ public:
       string temp;
       while(getline(f,temp,'|'))
       {
-        while(temp[0]==' ')
-          temp = temp.substr(1,temp.length());
-        while(temp[temp.length()-1] == ' ')
-          temp = temp.substr(0,temp.length()-1);
+        temp = remove_extra_spaces(temp);
         right_parts.push_back(temp);
         istringstream g(temp);
         string temp2;
