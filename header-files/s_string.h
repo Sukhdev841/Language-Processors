@@ -38,6 +38,16 @@ string remove_ith_part(string str,int i,char delimeter)
   return result;
 }
 
+string remove_last_part(string str,char delimeter)
+{
+  vector<string> parts = get_parts(str,delimeter);
+  string result = "";
+  for(int i=0;i<parts.size()-1;i++)
+    result += parts[i] + " ";
+  result = result.substr(0,result.size()-1);
+  return result;
+}
+
 string get_ith_part(string str,int i, char delimeter)
 {
   istringstream f(str);
@@ -52,6 +62,17 @@ string get_ith_part(string str,int i, char delimeter)
   return "";
 }
 
+string get_last_part(string str,char delimeter)
+{
+  istringstream f(str);
+  string temp;
+  string result = "";
+  while(getline(f,temp,delimeter))
+  {
+    result = temp;
+  }
+  return result;
+}
 
 // from geeksforgeeks
 //
