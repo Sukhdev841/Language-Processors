@@ -82,12 +82,18 @@ vector<set<string> > follow(s_context_free_grammer grammer)
   }
   cout<<endl;
 
+  cout<<"\nLoop2\n";
+  cout<<"\nLoop2\n";
+
   for(set<string>::iterator it = variables.begin() ; it != variables.end(); it++)
   {
+    cout<<"\n*it = "<<*it<<endl;
     set<string> temp;
     for(int i=0;i<grammer.productions.size();i++)
     {
       vector<string> parts = grammer.productions[i].right_parts;
+      cout<<"\nproduction is \n";
+      grammer.productions[i].print();
       for(int pp=0;pp<parts.size();pp++)
       {
         vector<string> parts2 = get_parts(parts[pp],' ');
@@ -97,6 +103,7 @@ vector<set<string> > follow(s_context_free_grammer grammer)
           if(parts2[index] == *it)
             break;
         }
+        cout<<"\nindex = "<<index<<" and part size "<<parts2.size()<<endl;
       //int index = parts.begin() - find(parts.begin(),parts.end(),(*it));
       if( index != parts2.size() && index+1 != parts2.size())
       {
