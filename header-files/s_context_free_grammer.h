@@ -266,7 +266,7 @@ public:
           for(int i=1;i<local_right_parts.size();i++)
           {
           //  cout<<"\nLocal right parts "<<i<<" = "<<local_right_parts[i]<<endl;
-            if( length >= local_right_parts[i].length() || local_right_parts[i].substr(0,length) != temp_prefix)
+            if( length >= local_right_parts[i].length() || local_right_parts[i].substr(length-1,local_right_parts[i].length()) != temp_prefix)
             {
               cout<<"\nLoop is breaking due to -"<<local_right_parts[i].substr(0,length)<<"- substring\n";
               same_prefix_upto_length = false;
@@ -343,6 +343,7 @@ class s_context_free_grammer
     vector<s_production> productions;
     set<string> variables;
     set<string> terminals;
+    vector<set<string> > all_firsts;
 
     s_context_free_grammer()
     {}
@@ -523,6 +524,47 @@ class s_context_free_grammer
         }
       }
       return result;
+    }
+
+    vector<set< string> > first()
+    {
+      vector< set< string> > result;
+      for( set<string>::iterator it = variables.begin(); it!= variables.end() ; it++)
+      {
+        set<string> temp;
+        s_production prod = get_production_with(*it);
+        if(prod.is_part_on_right("#"))
+        {
+          temp.insert("#");
+        }
+        for(int i=0;i<prod.right_parts.size();i++)
+        {
+          bool change_happen = true;
+          while(change_happen)
+          {
+            change_happen = false;
+            if(is_a_terminal(get_ith_part(prod.right_parts[i],1,' ')))
+            {
+              temp.insert(get_ith_part(prod.right_parts[i],1,' '));
+            }
+            else if(get_ith_part(prod.right_parts[i],1,' ') != prod.left_side)
+            {
+              // if not same
+              prod.replace_with(get_production_with(get_ith_part(prod.right_parts[i],1,' ')));
+              change_happen = true;
+            }
+          }
+        }
+        result.push_back(temp);
+
+      }
+      return result;
+    }
+
+    void generate_all_firsts()
+    {
+      this->all_firsts = first();
+      cout<<"\nsize of all first internally = "<<all_firsts.size()<<endl;
     }
 
 

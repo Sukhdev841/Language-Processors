@@ -1,5 +1,23 @@
-S -> a a a B | a a C
-S -> i E t S | i E t S e S | a
+5
+E -> T E'
+E' -> + T E' | #
+T -> F T'
+T' -> * F T' | #
+F -> ( E ) | id
+
+
 2
-S -> A a | b
+S -> A a| b
 A -> A c | S d | #
+
+A -> A a | b
+S -> a B | a C | a E | D
+
+
+
+
+
+
+
+
+
