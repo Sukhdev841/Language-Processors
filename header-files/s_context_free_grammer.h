@@ -239,10 +239,14 @@ public:
       vector<s_production> vec;
       map<string,vector<string> > common_prefix_strings; // map<  prefix  , vector containing all parts with prefix >
 
+      cout<<"\nRight parts are\n";
+
       for(int i=0;i<right_parts.size();i++)
       {
+        cout<<"\n-"<<right_parts[i]<<"-";
         common_prefix_strings[get_ith_part(right_parts[i],1,' ')].push_back(right_parts[i]);
       }
+      cout<<endl;
       s_production production1;
       vector<s_production> result;
       map<string,vector < string> > :: iterator c_p_s_itr = common_prefix_strings.begin();
@@ -256,12 +260,15 @@ public:
         vector<string> local_right_parts = (*c_p_s_itr).second;
         for(int length=2; local_right_parts.size() > 1 ;length++)
         {
-          string temp_prefix = local_right_parts[0].substr(length-1,local_right_parts[0].length());
+          string temp_prefix = local_right_parts[0].substr(0,length);
+          cout<<"\nprefix is -"<<temp_prefix<<"-\n";
           bool same_prefix_upto_length = true;
           for(int i=1;i<local_right_parts.size();i++)
           {
+          //  cout<<"\nLocal right parts "<<i<<" = "<<local_right_parts[i]<<endl;
             if( length >= local_right_parts[i].length() || local_right_parts[i].substr(0,length) != temp_prefix)
             {
+              cout<<"\nLoop is breaking due to -"<<local_right_parts[i].substr(0,length)<<"- substring\n";
               same_prefix_upto_length = false;
               break;
             }
@@ -517,5 +524,7 @@ class s_context_free_grammer
       }
       return result;
     }
+
+
 
 };
