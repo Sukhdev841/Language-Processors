@@ -366,6 +366,7 @@ class s_context_free_grammer
       set<string>::iterator it = right_variables.begin();
       while(it != right_variables.end())
       {
+      	if(!is_a_variable(*it))
         terminals.insert(*it);
         it++;
       }

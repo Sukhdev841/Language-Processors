@@ -5,6 +5,17 @@ T -> F T'
 T' -> * F T' | #
 F -> ( E ) | id
 
+3
+A -> i E t A A' | a
+A' -> e A | #
+E -> b
+
+
+
+
+
+
+
 
 2
 S -> A a| b

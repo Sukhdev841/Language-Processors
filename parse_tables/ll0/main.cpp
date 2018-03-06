@@ -212,6 +212,140 @@ vector<set<string> > follow(s_context_free_grammer g)
 	return result;
 }
 
+int** parse_table(vector<set<string> > follows,s_context_free_grammer g)
+{
+	cout<<"\n---------------------------------------------------------------------------------------\n";
+	cout<<"\n---------------------------------------------------------------------------------------\n";
+	cout<<"\n---------------------------------------------------------------------------------------\n";
+	cout<<"\n                               	     PARSE TABLE\n";
+	for(int i=0;i<g.productions.size();i++)
+	{
+		cout<<i+1<<") ";
+		g.productions[i].print();
+		cout<<endl;
+	}
+	
+	int **arr = new int*[g.variables.size()];
+	
+	for(int i=0;i<g.variables.size();i++)
+	{
+		arr[i] = new int[g.terminals.size()];
+		for(int j=0;j<g.terminals.size();j++)
+			arr[i][j] = 0;
+	}
+	
+	vector<string> vars = to_vector(g.variables);
+	set<string> temp = g.terminals;
+	temp.erase("#");
+	temp.insert("$");
+	vector<string> terms = to_vector(temp);
+	map<string,int> var_index,term_index;
+	cout<<endl;
+	for(int i=0;i<vars.size();i++)
+	{
+		cout<<vars[i]<<" = "<<i<<endl;
+		var_index[vars[i]]=i;
+	}
+	cout<<endl;
+	for(int i=0;i<terms.size();i++)
+	{
+		cout<<terms[i]<<" = "<<i<<endl;
+		term_index[terms[i]]=i;
+	}
+		
+		
+	vector<set<string> > firsts_ = g.first();
+	
+	for(int i=0;i<g.productions.size();i++)
+	{
+		int left_index = var_index[g.productions[i].left_side];
+		vector<string> right_parts = g.productions[i].right_parts;
+		cout<<endl;
+		g.productions[i].print();
+		cout<<endl;
+		cout<<endl;
+		for(int j=0;j<right_parts.size();j++)
+		{
+			string var_zero = get_ith_part(right_parts[j],1,' ');
+			if(g.is_a_terminal(var_zero) && var_zero!="#")
+			{
+				cout<<"var_zero : "<<var_zero<<" is a terminal\n";
+				cout<<10*(i+1)+j+1<<" is added to M["<<g.productions[i].left_side<<"]["<<var_zero<<"] due to ";
+				cout<<g.productions[i].left_side<<" -> "<<right_parts[j]<<endl;
+				arr[left_index][term_index[var_zero]] = 10*(i+1)+j+1;
+			}
+			else if(var_zero == "#")
+			{
+				set<string> local_follow = follows[left_index];
+					set<string>::iterator it = local_follow.begin();
+					while( it!=local_follow.end())
+					{
+						if(*it != "#")
+						{
+							cout<<"it = "<<*it<<endl;
+							cout<<10*(i+1)+j+1<<" is added to M["<<g.productions[i].left_side<<"]["<<*it<<"] due to ";
+							cout<<g.productions[i].left_side<<" -> "<<right_parts[j]<<endl;
+							arr[left_index][term_index[*it]]=10*(i+1)+j+1;
+						}
+						it++;
+					}	
+			}
+			else if(g.is_a_variable(var_zero))
+			{
+				cout<<"var_zero : "<<var_zero<<" is not a terminal\n";
+				
+				set<string> local_firsts = firsts_[var_index[var_zero]];
+				set<string>::iterator it = local_firsts.begin();
+				while( it!=local_firsts.end())
+				{
+					cout<<"in local firsts\n";
+					if(*it != "#")
+					{
+						cout<<"it = "<<*it<<endl;
+						cout<<10*(i+1)+j+1<<" is added to M["<<g.productions[i].left_side<<"]["<<*it<<"] due to ";
+						cout<<g.productions[i].left_side<<" -> "<<right_parts[j]<<endl;
+						arr[left_index][term_index[*it]]=10*(i+1)+j+1;
+					}
+					it++;
+				}
+				//setp 3
+				if(local_firsts.find("#") != local_firsts.end())
+				{
+					cout<<"\nvar zero's first also contains NULL\n";
+					set<string> local_follow = follows[left_index];
+					it = local_follow.begin();
+					while( it!=local_follow.end())
+					{
+						if(*it != "#")
+						{
+							cout<<"it = "<<*it<<endl;
+							cout<<10*(i+1)+j+1<<" is added to M["<<g.productions[i].left_side<<"]["<<*it<<"] due to ";
+							cout<<g.productions[i].left_side<<" -> "<<right_parts[j]<<endl;
+							arr[left_index][term_index[*it]]=10*(i+1)+j+1;
+						}
+						it++;
+					}
+				}
+				
+			}
+		}
+	}
+	cout<<endl;
+	cout<<"\t";
+	for(int j=0;j<g.terminals.size();j++)
+		cout<<terms[j]<<"\t";
+	cout<<endl;
+	for(int i=0;i<g.variables.size();i++)
+	{
+		cout<<vars[i]<<"\t";
+		for(int j=0;j<g.terminals.size();j++)
+			cout<<arr[i][j]<<"\t";
+		cout<<endl;
+	}
+	cout<<endl;
+	return arr;
+}
+
 int main()
 {
   int n;
@@ -248,6 +382,8 @@ int main()
     cout<<endl;
   }
   cout<<endl;
+  
+  parse_table(firsts,grammer);
 
   return 0;
 }
