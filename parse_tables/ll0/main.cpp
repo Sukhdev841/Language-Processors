@@ -346,6 +346,89 @@ int** parse_table(vector<set<string> > follows,s_context_free_grammer g)
 	return arr;
 }
 
+string print(stack<string> s)
+{
+	if(s.empty())
+		return "";
+	string x = s.top();
+	s.pop();
+	return x+print(s);
+}
+
+bool parse(string input,int **arr,s_context_free_grammer g)
+{
+	///
+	cout<<"\ninput = "<<input<<endl;
+	vector<string> input_parts = get_parts(input,' ');
+	vector<string> vars = to_vector(g.variables);
+	set<string> temp = g.terminals;
+	temp.erase("#");
+	temp.insert("$");
+	vector<string> terms = to_vector(temp);
+	map<string,int> var_index,term_index;
+	cout<<endl;
+	for(int i=0;i<vars.size();i++)
+	{
+		cout<<vars[i]<<" = "<<i<<endl;
+		var_index[vars[i]]=i;
+	}
+	cout<<endl;
+	for(int i=0;i<terms.size();i++)
+	{
+		cout<<terms[i]<<" = "<<i<<endl;
+		term_index[terms[i]]=i;
+	}
+	
+	///
+	stack<string> st;
+	st.push("$");
+	st.push(g.productions[0].left_side);
+	//cout<<"size = "<<input_parts.size()<<endl;
+	cout<<"\nSTACK\t\t\tINPUT\t\t\t\tOUTPUT\n";
+	for(int i=0;i<input_parts.size();i++)
+	{
+		string stack_string = print(st);
+		string input_remaining = "";
+		for(int x=i;x<input_parts.size();x++)
+			input_remaining += input_parts[x];
+		
+		cout<<stack_string<<setw(30-stack_string.length())<<input_remaining;
+		
+		if(g.is_a_terminal(st.top()) || st.top()=="$")
+		{
+			if(st.top() == input_parts[i])
+				st.pop();
+			else
+				return false;
+		}
+		else
+		{
+			//cout<<"\nAccessing "<<var_index[st.top()]<<" "<<term_index[input_parts[i]];
+			int val = arr[var_index[st.top()]][term_index[input_parts[i]]];
+			int col = val%10;
+			int row = val/10;
+			st.pop();
+			s_production temp_pr = g.productions[row-1];
+			string part = temp_pr.right_parts[col-1];
+			cout<<setw(30-input_remaining.length())<<temp_pr.left_side<<" -> "<<part<<endl;
+			vector<string> parts = get_parts(part,' ');
+			for(int j=parts.size()-1;j>=0;j--)
+			{
+				if(parts[j]!="#")
+					st.push(parts[j]);
+				//cout<<"\npusing part "<<parts[j];
+				
+			}
+			i--;
+				
+			//find prodction using col , row
+			
+		}
+		cout<<endl;
+	}
+	return true;
+}
+
 int main()
 {
   int n;
@@ -383,7 +466,18 @@ int main()
   }
   cout<<endl;
   
-  parse_table(firsts,grammer);
+	int **t =  parse_table(firsts,grammer);
+	cout<<"\nEnter string to parse : ";
+	string input;
+	cin.clear();
+	//cin.ignore();
+	getline(cin,input);
+	if(parse(input,t,grammer))
+	{
+		cout<<"\nString parsed\n";
+	}
+	else
+		cout<<"\nString not parsed\n";
 
   return 0;
 }

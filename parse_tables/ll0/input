@@ -5,6 +5,8 @@ T -> F T'
 T' -> * F T' | #
 F -> ( E ) | id
 
+id + id * id $
+
 3
 A -> i E t A A' | a
 A' -> e A | #
