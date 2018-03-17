@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include "global.h"
+//#include "global.h"
 int size;
 char *operators_;
 int *my_priority_;
@@ -24,25 +24,25 @@ line : exp sem {printf("result is %d\n",$1);}
       ;
 exp : factor2           {$$ = $1;}
     | exp per1 factor2     {
-    												printf("periority 1 sign %c",$2);
+    								 printf("periority 1 sign %c",$2);
                             $$ = operation($2,$1,$3);
-    											}
+    								}
     ;
 factor2:factor3           {$$=$1;}
     |factor2 per2 factor3	{
-    												printf("periority 2 sign %c",$2);
+    								 printf("periority 2 sign %c",$2);
                             $$ = operation($2,$1,$3);
     								}
 			;
 factor3: factor4
       | factor3 per3 factor4 {
-      												printf("periority 3 sign %c",$2);
+      								printf("periority 3 sign %c",$2);
                               $$ = operation($2,$1,$3);
       								}
       ;
 factor4: factor5
       | factor4 per4 factor5 {
-      												printf("periority 4 sign %c",$2);
+      								printf("periority 4 sign %c",$2);
                               $$ = operation($2,$1,$3);
       								}
       ;

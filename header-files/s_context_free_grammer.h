@@ -3,6 +3,11 @@
 
 using namespace std;
 
+class s_production;
+class s_context_free_grammer;
+vector<set<string> > follow(s_context_free_grammer);
+void print(vector<s_production> );
+
 class s_production
 {
 public:
@@ -139,11 +144,13 @@ public:
       right_parts.push_back(variables);
       istringstream g(variables);
       string temp2;
-      while(getline(cin,temp2,' '))
+      while(getline(g,temp2,' '))
       {
         if(temp2!= "" && temp2!=" ")
           right_variables.insert(temp2);
       }
+      ////cout<<"\nbefore removing null\n";
+      //print();
       remove_null();
       refresh();
     }
@@ -169,38 +176,78 @@ public:
       }
     }
 
+    void all_combinations(string str,vector<string> replacements,vector<int> positions,int current_position,vector<string> &result)
+    {
+      if(current_position >= positions.size())
+      {
+        result.push_back(str);
+        return;
+      }
+      for(int i=0;i<replacements.size();i++)
+      {
+        string new_string = put_at_index(str,replacements[i],positions[current_position],' ');
+        all_combinations(new_string,replacements,positions,current_position+1,result);
+      }
+    }
+
     void replace_with(s_production p)
     {
-      vector<string> parts_of_p = p.right_parts;
-      s_production new_production;
-      new_production.left_side = this->left_side;
-      bool change_happen = false;
-
-      for(int i=0;i<right_parts.size();i++)
+      //cout<<"\nin replace with\n";
+      s_production new_p;
+      new_p.left_side = this->left_side;
+      for(int i=0;i<this->right_parts.size();i++)
       {
-        vector<string> parts = get_parts(right_parts[i],' ');
-        int index = find(parts.begin(),parts.end(),p.left_side) - parts.begin();
-        if(index == parts.size())
+        vector<int> positions;
+        string str = this->right_parts[i];
+        while(true)
         {
-          new_production.insert_on_right(right_parts[i]);
-          continue;
+          int index = find_index_of(str,p.left_side,' ');
+          if(index == -1)
+            break;
+          positions.push_back(index);
+          str = put_at_index(str,"#",index,' ');
         }
-        change_happen = true;
-        for(int j=0;j<parts_of_p.size();j++)
-        {
-          string temp_right_side = "";
-          for(int k=0;k<index;k++)
-            temp_right_side += parts[k] + " ";
-          temp_right_side += parts_of_p[j] + " ";
-          for(int k = index+1;k<parts.size();k++)
-            temp_right_side += parts[k]+" ";
-          new_production.insert_on_right(temp_right_side);
-        }
+        str = this->right_parts[i];
+        vector<string> combinations;
+        all_combinations(str,p.right_parts,positions,0,combinations);
+        for(int j=0;j<combinations.size();j++)
+          new_p.insert_on_right(combinations[j]);
       }
-      new_production.refresh();
-      if(change_happen)
-        new_production.replace_with(p);   // recursive implementation
-      *this = new_production;
+      *this = new_p;
+
+      // vector<string> parts_of_p = p.right_parts;
+      // s_production new_production;
+      // new_production.left_side = this->left_side;
+      // bool change_happen = false;
+      //
+      // for(int i=0;i<right_parts.size();i++)
+      // {
+      //   // here
+      //   // A -> B B B
+      //   // B -> a
+      //   vector<string> parts = get_parts(right_parts[i],' ');
+      //   int index = find(parts.begin(),parts.end(),p.left_side) - parts.begin();
+      //   if(index == parts.size())
+      //   {
+      //     new_production.insert_on_right(right_parts[i]);
+      //     continue;
+      //   }
+      //   change_happen = true;
+      //   for(int j=0;j<parts_of_p.size();j++)
+      //   {
+      //     string temp_right_side = "";
+      //     for(int k=0;k<index;k++)
+      //       temp_right_side += parts[k] + " ";
+      //     temp_right_side += parts_of_p[j] + " ";
+      //     for(int k = index+1;k<parts.size();k++)
+      //       temp_right_side += parts[k]+" ";
+      //     new_production.insert_on_right(temp_right_side);
+      //   }
+      // }
+      // new_production.refresh();
+      // if(change_happen)
+      //   new_production.replace_with(p);   // recursive implementation
+      // *this = new_production;
     }
 
     vector<s_production> remove_immediate_left_recursion()
@@ -239,14 +286,14 @@ public:
       vector<s_production> vec;
       map<string,vector<string> > common_prefix_strings; // map<  prefix  , vector containing all parts with prefix >
 
-      cout<<"\nRight parts are\n";
+      //cout<<"\nRight parts are\n";
 
       for(int i=0;i<right_parts.size();i++)
       {
-        cout<<"\n-"<<right_parts[i]<<"-";
+        //cout<<"\n-"<<right_parts[i]<<"-";
         common_prefix_strings[get_ith_part(right_parts[i],1,' ')].push_back(right_parts[i]);
       }
-      cout<<endl;
+      //cout<<endl;
       s_production production1;
       vector<s_production> result;
       map<string,vector < string> > :: iterator c_p_s_itr = common_prefix_strings.begin();
@@ -261,14 +308,14 @@ public:
         for(int length=2; local_right_parts.size() > 1 ;length++)
         {
           string temp_prefix = local_right_parts[0].substr(0,length);
-          cout<<"\nprefix is -"<<temp_prefix<<"-\n";
+          //cout<<"\nprefix is -"<<temp_prefix<<"-\n";
           bool same_prefix_upto_length = true;
           for(int i=1;i<local_right_parts.size();i++)
           {
-          //  cout<<"\nLocal right parts "<<i<<" = "<<local_right_parts[i]<<endl;
+          //  //cout<<"\nLocal right parts "<<i<<" = "<<local_right_parts[i]<<endl;
             if( length >= local_right_parts[i].length() || local_right_parts[i].substr(length-1,local_right_parts[i].length()) != temp_prefix)
             {
-              cout<<"\nLoop is breaking due to -"<<local_right_parts[i].substr(0,length)<<"- substring\n";
+              //cout<<"\nLoop is breaking due to -"<<local_right_parts[i].substr(0,length)<<"- substring\n";
               same_prefix_upto_length = false;
               break;
             }
@@ -343,6 +390,7 @@ class s_context_free_grammer
     vector<s_production> productions;
     set<string> variables;
     set<string> terminals;
+    string start_variable;
     vector<set<string> > all_firsts;
 
     s_context_free_grammer()
@@ -494,6 +542,8 @@ class s_context_free_grammer
         this->productions = g.productions;
         this->variables = g.variables;
         this->terminals = g.terminals;
+        this->start_variable = g.start_variable;
+        this->all_firsts = g.all_firsts;
       }
       return *this;
     }
@@ -540,24 +590,33 @@ class s_context_free_grammer
         }
         for(int i=0;i<prod.right_parts.size();i++)
         {
+          ////cout<<"\nfor\n";
           bool change_happen = true;
           while(change_happen)
           {
+            ////cout<<"\nChange happen\n";
             change_happen = false;
             if(is_a_terminal(get_ith_part(prod.right_parts[i],1,' ')))
             {
+              ////cout<<"\ninserting\n";
               temp.insert(get_ith_part(prod.right_parts[i],1,' '));
+              ////cout<<"\ninserted\n";
             }
             else if(get_ith_part(prod.right_parts[i],1,' ') != prod.left_side)
             {
               // if not same
+              //  //cout<<"\nreplacing\n";
+              //prod.print();
+              ////cout<<"\nwith\n";
+              //get_production_with(get_ith_part(prod.right_parts[i],1,' ')).print();
+              ////cout<<endl;
               prod.replace_with(get_production_with(get_ith_part(prod.right_parts[i],1,' ')));
+              ////cout<<"\nreplaced\n";
               change_happen = true;
             }
           }
         }
         result.push_back(temp);
-
       }
       return result;
     }
@@ -565,9 +624,209 @@ class s_context_free_grammer
     void generate_all_firsts()
     {
       this->all_firsts = first();
-      cout<<"\nsize of all first internally = "<<all_firsts.size()<<endl;
+      ////cout<<"\nsize of all first internally = "<<all_firsts.size()<<endl;
     }
-
-
-
 };
+
+vector<set<string> > follow(s_context_free_grammer g)
+{
+  ////cout<<"\nIn follow\n";
+  ////cout<<"\nIn follow\n";
+	vector< set<string> > result1,result2,result;
+	vector<string> vars = to_vector(g.variables);
+  ////cout<<"\nVars found\n";
+  ////cout<<"\nVars found\n";
+	vector<string> terms = to_vector(g.terminals);
+  ////cout<<"\nterms found\n";
+  ////cout<<"\nterms found\n";
+	vector< set<string> > firsts_ = g.first();
+  ////cout<<"\nfirst found\n";
+  ////cout<<"\nfirst found\n";
+	////cout<<"\nvars = "<<vars.size();
+	////cout<<"\nterms = "<<terms.size();
+	////cout<<"\nfirsts = "<<firsts_.size();
+	////cout<<"\nFirst are \n";
+	//print(firsts_);
+
+	// loop1
+	////cout<<"\nloop1\n";
+	////cout<<"\nloop1\n";
+	for(int i=0;i<vars.size();i++)
+	{
+		set<string> local_set;
+		if(vars[i]==g.start_variable)
+    {
+        local_set.insert("$");
+    }
+		for(int j=0;j<g.productions.size();j++)
+		{
+			vector<string> production_parts = g.productions[j].right_parts;
+			// search for var[i]
+			for(int k=0;k<production_parts.size();k++)
+			{
+				//now search
+				vector<string> zero_parts = get_parts(production_parts[k],' ');
+				int index = find(zero_parts.begin(),zero_parts.end(),vars[i]) - zero_parts.begin();
+				if( index == zero_parts.size() || index+1 >= zero_parts.size())
+					continue;		// not found or no next variable
+				// index of variable at index+1
+				string next_var = zero_parts[index+1];
+				if(g.is_a_terminal(next_var))
+				{
+					local_set.insert(next_var);		// if next var is a terminal
+					continue;
+				}
+				int v_index = find(vars.begin(),vars.end(),next_var) - vars.begin();
+				// not find its first
+				set<string> v_first = firsts_[v_index];
+				//merge it with local set
+				v_first.erase("#");
+				local_set = merge_(v_first,local_set);
+			}
+		}
+		result1.push_back(local_set);
+	}
+
+	////cout<<"\nloop2\n";
+	////cout<<"\nloop2\n";
+	// loop2
+  // cout<<"\nAfter loop1\n";
+  // print(result1);
+  // cout<<endl;
+  for(int i=0;i<vars.size();i++)
+  {
+    set<string> x;
+    result2.push_back(x);
+  }
+  //  result2.push_back(new set<string> () );
+	bool change_happen = true;
+	int count = 7;
+	while(count--){
+	change_happen = false;
+
+	for(int i=0;i<vars.size();i++)
+	{
+		// cout<<"\n-----------------------------------------------------------------------------------\n";
+		// cout<<"\nvar = "<<vars[i];
+		set<string> local_set = result2[i];
+		if(i==0)
+			local_set.insert("$");
+		for(int j=0;j<g.productions.size();j++)
+		{
+			////cout<<"\nproduction = ";
+			//g.productions[j].print();
+			vector<string> production_parts = g.productions[j].right_parts;
+			// search for var[i]
+			for(int k=0;k<production_parts.size();k++)
+			{
+				//now search
+				vector<string> zero_parts = get_parts(production_parts[k],' ');
+				int index = find(zero_parts.begin(),zero_parts.end(),vars[i]) - zero_parts.begin();
+				////cout<<"\nindex = "<<index;
+				////cout<<"\nzero_parts size = "<<zero_parts.size();
+				if( index == zero_parts.size())
+					continue;		// not found
+
+				if( index + 1 >= zero_parts.size() )
+				{
+					// condition satisfied
+					////cout<<"\nThere is nothing to right (condition satisfied)\n";
+
+					// find index of variable at left side
+					index = find(vars.begin(),vars.end(),g.productions[j].left_side) - vars.begin();
+					set<string> temp_set = result1[index];
+					temp_set.erase("#");
+					local_set = merge_(local_set,temp_set);
+					////cout<<"\nSo new local set is \n";
+					//print(local_set);
+					continue;		//done
+				}
+
+				// check if first of right contains NULL (#)
+				// index of variable at index+1
+				string next_var = zero_parts[index+1];
+				if(g.is_a_terminal(next_var))
+				{
+					////cout<<"\nNext is terminal !\n";
+					// terminal (can't be NULL)
+					continue;
+				}
+				////cout<<"\nNext variable is : "<<next_var<<endl;
+				int v_index = find(vars.begin(),vars.end(),next_var) - vars.begin();
+				////cout<<"\nSize of result1 = "<<result1.size()<<endl;
+				////cout<<"\nv_index = "<<v_index;
+				// not find its first
+				set<string> v_first = firsts_[v_index];
+				set<string>::iterator xxx = v_first.find("#");
+				if(xxx == v_first.end())
+				{
+					////cout<<"\nNext variable's first doesn't contain #\n";
+					continue;
+				}
+        // next var can be null ( # )
+				//merge it with local set
+				////cout<<"\nlocal size = "<<local_set.size()<<" result1[v_index].size() = "<<result1[v_index].size()<<endl;
+        v_index = find(vars.begin(),vars.end(),g.productions[j].left_side) - vars.begin();
+        // cout<<"\nCurrent variable : "<<vars[i]<<endl;
+        // cout<<"Left side var is : "<<vars[v_index]<<endl;
+        // g.productions[j].print();
+        // cout<<endl;
+				set<string> temp_set = result1[v_index];
+				temp_set.erase("#");
+        // cout<<"Result1["<<v_index<<"] is \n";
+        // print(temp_set);
+        // cout<<"\nLocal set before merging : \n";
+        // print(local_set);
+				local_set = merge_(temp_set,local_set);
+        // cout<<"\nLocal set after merging : ";
+        // print(local_set);
+        // cout<<"\nOld result1 is : \n";
+        // print(result1[v_index]);
+        result1[v_index] = local_set;
+        // cout<<"\nNew result1 is : \n";
+        // print(result1[v_index]);
+				////cout<<"\nNext variable's first contains # (condition satisfied)\n";
+				////cout<<"\nSo new local set is \n";
+				//print(local_set);
+				////cout<<"\nwhich is result of merging\n";
+				//print(result1[v_index]);
+			}
+		}
+		result2[i]= local_set;
+
+	}
+	////cout<<"\nResult 1 \n";
+	//print(result1);
+	////cout<<"\nresult2\n";
+	//print(result2);
+
+
+	result.clear();
+	for(int i=0;i<vars.size();i++)
+		result.push_back(merge_(result1[i],result2[i]));
+	result1 = result;
+  result2 = result;
+	//result2.clear();
+	}
+	return result1;
+	//cout<<"\nafter loop2\n";
+	//cout<<"\nafter loop2\n";
+	//last
+	for(int i=0;i<vars.size();i++)
+	{
+		result.push_back(merge_(result1[i],result2[i]));
+	}
+	return result;
+}
+
+void print(vector<s_production> p)
+{
+  cout<<endl;
+  for(int i=0;i<p.size();i++)
+  {
+    cout<<i+1<<")\t";
+    p[i].print();
+    cout<<endl;
+  }
+  cout<<endl;
+}

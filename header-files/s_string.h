@@ -7,8 +7,43 @@ string remove_ith_part(string, int, char);
 string get_ith_part(string, int, char);
 void reverse(char, int);
 char* itoa(int, char*, int);
+vector<string> to_vector( set<string>);
 string itos(int);
+//int stoi(string);
 string remove_extra_spaces(string);
+set<string> merge_(set<string>,set<string>);
+void print(set<string>);
+void print(vector<set<string> > );
+string print(stack<string> );
+int find_index_of(string str,string part,char delimeter);
+string put_after_index(string,int,char);
+
+string put_after_index(string str,string part,int index,char delimeter)
+{
+  string result = "";
+  vector<string> parts = get_parts(str,delimeter);
+  for(int i=0;i<parts.size();i++)
+  {
+    if(i == index)
+      result += part+ delimeter;
+      result += parts[i] + delimeter;
+  }
+  return result.substr(0,result.length()-1);
+}
+
+string put_at_index(string str,string part,int index,char delimeter)
+{
+  string result = "";
+  vector<string> parts = get_parts(str,delimeter);
+  for(int i=0;i<parts.size();i++)
+  {
+    if(i+1 == index)
+      result += part+ delimeter;
+    else
+      result += parts[i] + delimeter;
+  }
+  return result.substr(0,result.length()-1);
+}
 
 vector<string> get_parts(string str,char delimeter)
 {
@@ -20,6 +55,17 @@ vector<string> get_parts(string str,char delimeter)
     parts.push_back(temp);
   }
   return parts;
+}
+
+int find_index_of(string str,string part,char delimeter)
+{
+  vector<string> parts = get_parts(str,delimeter);
+  for(int i=0;i<parts.size();i++)
+  {
+    if(parts[i] == part)
+      return i+1;
+  }
+  return -1;
 }
 
 string remove_ith_part(string str,int i,char delimeter)
@@ -137,6 +183,11 @@ string itos(int num)
   return string(str);
 }
 
+// int stoi(string num)
+// {
+//   return atoi(num.c_str());
+// }
+
 string remove_extra_spaces(string str)
 {
   string temp = "";
@@ -159,4 +210,71 @@ string remove_extra_spaces(string str)
   while(temp[temp.length()-1]==' ')
     temp = temp.substr(0,temp.length()-1);
   return temp;
+}
+
+vector<string> to_vector( set<string> s)
+{
+	vector<string> vec;
+	set<string>::iterator it = s.begin();
+	while(it!=s.end())
+	{
+		vec.push_back(*it);
+		it++;
+	}
+	return vec;
+}
+
+set<string> merge_(set<string> s1,set<string> s2)
+{
+	if(s1.size() == 0)
+		return s2;
+	if(s2.size() == 0)
+		return s1;
+	set<string> s3;
+	set<string>::iterator it = s1.begin();
+	while(it!=s1.end())
+	{
+		s3.insert(*it);
+		it++;
+	}
+	it = s2.begin();
+	while(it!=s2.end())
+	{
+		s3.insert(*it);
+		it++;
+	}
+	return s3;
+}
+
+void print(set<string> s)
+{
+		cout<<endl;
+		set<string>::iterator it = s.begin();
+		while(it!=s.end())
+		{
+			cout<<*it<<" ";
+			it++;
+		}
+		cout<<endl;
+}
+
+void print(vector<set<string> >s)
+{
+	cout<<endl;
+	for(int i=0;i<s.size();i++)
+	{
+    cout<<i+1<<".\t";
+		print(s[i]);
+    cout<<endl;
+	}
+
+}
+
+string print(stack<string> s)
+{
+	if(s.empty())
+		return "";
+	string x = s.top();
+	s.pop();
+	return x+print(s);
 }

@@ -67,7 +67,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include "global.h"
+//#include "global.h"
 int size;
 char *operators_;
 int *my_priority_;
@@ -1239,9 +1239,9 @@ yyreduce:
   case 6:
 #line 26 "calcy.y" /* yacc.c:1646  */
     {
-    												printf("periority 1 sign %c",(yyvsp[-1].op_type));
+    								 printf("periority 1 sign %c",(yyvsp[-1].op_type));
                             (yyval.a_number) = operation((yyvsp[-1].op_type),(yyvsp[-2].a_number),(yyvsp[0].a_number));
-    											}
+    								}
 #line 1246 "y.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1254,7 +1254,7 @@ yyreduce:
   case 8:
 #line 32 "calcy.y" /* yacc.c:1646  */
     {
-    												printf("periority 2 sign %c",(yyvsp[-1].op_type));
+    								 printf("periority 2 sign %c",(yyvsp[-1].op_type));
                             (yyval.a_number) = operation((yyvsp[-1].op_type),(yyvsp[-2].a_number),(yyvsp[0].a_number));
     								}
 #line 1261 "y.tab.c" /* yacc.c:1646  */
@@ -1263,7 +1263,7 @@ yyreduce:
   case 10:
 #line 38 "calcy.y" /* yacc.c:1646  */
     {
-      												printf("periority 3 sign %c",(yyvsp[-1].op_type));
+      								printf("periority 3 sign %c",(yyvsp[-1].op_type));
                               (yyval.a_number) = operation((yyvsp[-1].op_type),(yyvsp[-2].a_number),(yyvsp[0].a_number));
       								}
 #line 1270 "y.tab.c" /* yacc.c:1646  */
@@ -1272,7 +1272,7 @@ yyreduce:
   case 12:
 #line 44 "calcy.y" /* yacc.c:1646  */
     {
-      												printf("periority 4 sign %c",(yyvsp[-1].op_type));
+      								printf("periority 4 sign %c",(yyvsp[-1].op_type));
                               (yyval.a_number) = operation((yyvsp[-1].op_type),(yyvsp[-2].a_number),(yyvsp[0].a_number));
       								}
 #line 1279 "y.tab.c" /* yacc.c:1646  */

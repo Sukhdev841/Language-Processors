@@ -2,8 +2,8 @@
 #include "y.tab.h"
 #include "global.h"
 int size;
-char *operators_;
-int *my_priority_;
+//char *operators_;
+//int *my_priority_;
 int get_periority(char*);
 %}
 %%

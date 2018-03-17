@@ -1,0 +1,25 @@
+4
+E' -> E
+E -> E + T | T
+T -> T * F | F
+F -> ( E ) | id
+E'
+
+3
+A -> i E t A A' | a
+A' -> e A | #
+E -> b
+
+
+
+
+
+
+
+
+2
+S -> A a| b
+A -> A c | S d | #
+
+A -> A a | b
+S -> a B | a C | a E | D
