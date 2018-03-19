@@ -50,8 +50,7 @@ int main()
   grammer.print();
   //cout<<"\nStarting symbol = "<<grammer.start_variable<<endl;
 
-	//s_context_free_grammer g2 = grammer.remove_left_recursion();
-	s_context_free_grammer g2 = grammer;
+	s_context_free_grammer g2 = grammer.remove_left_recursion();
 	cout<<"\nWithout left recursion\n";
 	g2.print();
 	g2.start_variable = "E'";
@@ -331,8 +330,7 @@ void print_lr()
 
 vector<s_production> generate_action_table()
 {
-	//s_context_free_grammer new_grammer = grammer.remove_left_recursion();
-	s_context_free_grammer new_grammer = grammer;
+	s_context_free_grammer new_grammer = grammer.remove_left_recursion();
 	vector<set<string> > follows = follow(new_grammer);
   action_table.resize(states_count+1);
 	map<string,int> var_index2;

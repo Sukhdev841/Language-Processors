@@ -162,7 +162,7 @@ bool parse(string input,int **arr,s_context_free_grammer g)
 	stack<string> st;
 	st.push("$");
 	st.push(g.productions[0].left_side);
-	//cout<<"size = "<<input_parts.size()<<endl;
+	cout<<"size = "<<input_parts.size()<<endl;
 	cout<<"\nSTACK\t\t\tINPUT\t\t\t\tOUTPUT\n";
 	for(int i=0;i<input_parts.size();i++)
 	{
@@ -182,7 +182,7 @@ bool parse(string input,int **arr,s_context_free_grammer g)
 		}
 		else
 		{
-			//cout<<"\nAccessing "<<var_index[st.top()]<<" "<<term_index[input_parts[i]];
+			///cout<<"\nAccessing "<<var_index[st.top()]<<" "<<term_index[input_parts[i]];
 			int val = arr[var_index[st.top()]][term_index[input_parts[i]]];
 			int col = val%10;
 			int row = val/10;
@@ -224,13 +224,30 @@ int main()
 
   grammer.print();
 
-
+	vector<set<string> > firsts;
   grammer.generate_all_firsts();
-  vector<set<string> > firsts = follow(grammer);
+	cout<<"\nFirst are\n";
+	firsts = grammer.all_firsts;
+	set<string> variables = grammer.variables;
+  set<string>::iterator it = variables.begin();
+
+  for(int i=0;i<firsts.size();i++,it++)
+  {
+    cout<<"\nFirst for variable "<<*it<<endl;
+    set<string>::iterator it2 = firsts[i].begin();
+    while(it2 != firsts[i].end() )
+    {
+      cout<<*it2<<" ";
+      it2++;
+    }
+    cout<<endl;
+  }
+  cout<<endl;
+  firsts = follow(grammer);
   cout<<endl;
   cout<<"\nGot follow size = "<<firsts.size();
-  set<string> variables = grammer.variables;
-  set<string>::iterator it = variables.begin();
+  variables = grammer.variables;
+  it = variables.begin();
 
   for(int i=0;i<firsts.size();i++,it++)
   {

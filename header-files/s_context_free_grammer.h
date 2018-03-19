@@ -583,18 +583,23 @@ class s_context_free_grammer
       for( set<string>::iterator it = variables.begin(); it!= variables.end() ; it++)
       {
         set<string> temp;
-        s_production prod = get_production_with(*it);
-        if(prod.is_part_on_right("#"))
+        vector<s_production> xxx;
+        xxx.push_back(get_production_with(*it));
+        map<string,bool> already_present;
+        already_present[*it] = true;
+        for(int k=0;k<xxx.size();k++)
         {
-          temp.insert("#");
-        }
+          s_production prod = xxx[k];
+          if(prod.is_part_on_right("#"))
+          {
+            temp.insert("#");
+          }
         for(int i=0;i<prod.right_parts.size();i++)
         {
-          ////cout<<"\nfor\n";
           bool change_happen = true;
+          //int count = 3;
           while(change_happen)
           {
-            ////cout<<"\nChange happen\n";
             change_happen = false;
             if(is_a_terminal(get_ith_part(prod.right_parts[i],1,' ')))
             {
@@ -604,18 +609,29 @@ class s_context_free_grammer
             }
             else if(get_ith_part(prod.right_parts[i],1,' ') != prod.left_side)
             {
-              // if not same
-              //  //cout<<"\nreplacing\n";
-              //prod.print();
-              ////cout<<"\nwith\n";
-              //get_production_with(get_ith_part(prod.right_parts[i],1,' ')).print();
-              ////cout<<endl;
-              prod.replace_with(get_production_with(get_ith_part(prod.right_parts[i],1,' ')));
-              ////cout<<"\nreplaced\n";
-              change_happen = true;
+              if(already_present[get_ith_part(prod.right_parts[i],1,' ')] == false)
+              {
+                xxx.push_back(get_production_with(get_ith_part(prod.right_parts[i],1,' ')));
+                already_present[get_ith_part(prod.right_parts[i],1,' ')] == true;
+              }
+              //prod2 = get_production_with(get_ith_part(prod2.right_parts[0],1,' '));
+
+              // // if not same
+              // cout<<"\nreplacing\n";
+              // prod.print();
+              // cout<<"\nwith\n";
+              // get_production_with(get_ith_part(prod.right_parts[i],1,' ')).print();
+              // cout<<endl;
+              // cout<<"\nGoing to replace\n";
+              // cout<<"\nGoing to replace\n";
+              // prod.replace_with(get_production_with(get_ith_part(prod.right_parts[i],1,' ')));
+              // cout<<"\nreplaced\n";
+              // cout<<"\nreplaced\n";
+              //change_happen = true;
             }
           }
         }
+      }
         result.push_back(temp);
       }
       return result;
@@ -634,14 +650,14 @@ vector<set<string> > follow(s_context_free_grammer g)
   ////cout<<"\nIn follow\n";
 	vector< set<string> > result1,result2,result;
 	vector<string> vars = to_vector(g.variables);
-  ////cout<<"\nVars found\n";
-  ////cout<<"\nVars found\n";
+  // cout<<"\nVars found\n";
+  // cout<<"\nVars found\n";
 	vector<string> terms = to_vector(g.terminals);
-  ////cout<<"\nterms found\n";
-  ////cout<<"\nterms found\n";
+  // cout<<"\nterms found\n";
+  // cout<<"\nterms found\n";
 	vector< set<string> > firsts_ = g.first();
-  ////cout<<"\nfirst found\n";
-  ////cout<<"\nfirst found\n";
+  // cout<<"\nfirst found\n";
+  // cout<<"\nfirst found\n";
 	////cout<<"\nvars = "<<vars.size();
 	////cout<<"\nterms = "<<terms.size();
 	////cout<<"\nfirsts = "<<firsts_.size();
@@ -700,20 +716,20 @@ vector<set<string> > follow(s_context_free_grammer g)
   }
   //  result2.push_back(new set<string> () );
 	bool change_happen = true;
-	int count = 7;
+	int count = 3;
 	while(count--){
 	change_happen = false;
 
 	for(int i=0;i<vars.size();i++)
 	{
-		// cout<<"\n-----------------------------------------------------------------------------------\n";
-		// cout<<"\nvar = "<<vars[i];
-		set<string> local_set = result2[i];
+		 //cout<<"\n-----------------------------------------------------------------------------------\n";
+		 //cout<<"\nvar = "<<vars[i];
+		set<string> local_set = result1[i];
 		if(i==0)
 			local_set.insert("$");
 		for(int j=0;j<g.productions.size();j++)
 		{
-			////cout<<"\nproduction = ";
+			//cout<<"\nproduction = ";
 			//g.productions[j].print();
 			vector<string> production_parts = g.productions[j].right_parts;
 			// search for var[i]
@@ -730,15 +746,17 @@ vector<set<string> > follow(s_context_free_grammer g)
 				if( index + 1 >= zero_parts.size() )
 				{
 					// condition satisfied
-					////cout<<"\nThere is nothing to right (condition satisfied)\n";
+					//cout<<"\nThere is nothing to right (condition satisfied)\n";
 
 					// find index of variable at left side
 					index = find(vars.begin(),vars.end(),g.productions[j].left_side) - vars.begin();
 					set<string> temp_set = result1[index];
+          // cout<<"\nOld local set is";
+          // print(local_set);
 					temp_set.erase("#");
 					local_set = merge_(local_set,temp_set);
-					////cout<<"\nSo new local set is \n";
-					//print(local_set);
+					// cout<<"\nSo new local set is ";
+					// print(local_set);
 					continue;		//done
 				}
 
@@ -747,7 +765,7 @@ vector<set<string> > follow(s_context_free_grammer g)
 				string next_var = zero_parts[index+1];
 				if(g.is_a_terminal(next_var))
 				{
-					////cout<<"\nNext is terminal !\n";
+					//cout<<"\nNext is terminal !\n";
 					// terminal (can't be NULL)
 					continue;
 				}
@@ -763,6 +781,7 @@ vector<set<string> > follow(s_context_free_grammer g)
 					////cout<<"\nNext variable's first doesn't contain #\n";
 					continue;
 				}
+      //  cout<<"Condition "<<next_var<<" derives #\n";
         // next var can be null ( # )
 				//merge it with local set
 				////cout<<"\nlocal size = "<<local_set.size()<<" result1[v_index].size() = "<<result1[v_index].size()<<endl;
@@ -778,12 +797,12 @@ vector<set<string> > follow(s_context_free_grammer g)
         // cout<<"\nLocal set before merging : \n";
         // print(local_set);
 				local_set = merge_(temp_set,local_set);
-        // cout<<"\nLocal set after merging : ";
+      //   cout<<"\nLocal set after merging : ";
         // print(local_set);
-        // cout<<"\nOld result1 is : \n";
+        // cout<<"Old result1 is : \n";
         // print(result1[v_index]);
-        result1[v_index] = local_set;
-        // cout<<"\nNew result1 is : \n";
+        //result1[v_index] = local_set;       // -------------------------------> This condition
+        // cout<<"New result1 is : \n";
         // print(result1[v_index]);
 				////cout<<"\nNext variable's first contains # (condition satisfied)\n";
 				////cout<<"\nSo new local set is \n";
@@ -792,7 +811,7 @@ vector<set<string> > follow(s_context_free_grammer g)
 				//print(result1[v_index]);
 			}
 		}
-		result2[i]= local_set;
+		result1[i]= local_set;
 
 	}
 	////cout<<"\nResult 1 \n";
