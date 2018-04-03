@@ -52,10 +52,10 @@ int main()
 
 	//s_context_free_grammer g2 = grammer.remove_left_recursion();
 	s_context_free_grammer g2 = grammer;
-	cout<<"\nWithout left recursion\n";
-	g2.print();
+	//cout<<"\nWithout left recursion\n";
+	//g2.print();
 	g2.start_variable = "E'";
-	cout<<"\nStart variable of g2 : "<<g2.start_variable<<endl;
+	cout<<"\nStart variable of grammer : "<<g2.start_variable<<endl;
 	vector<set<string> > firsts = g2.first();
 	cout<<"\nFirsts are\n";
 	print(firsts);
@@ -71,7 +71,9 @@ int main()
   //tg.print();
   print_lr();
 	vector<s_production> r_ps = generate_action_table();
-	if(parse("id * id + id $",r_ps))
+	string tt;
+	getline(cin,tt);
+	if(parse(tt,r_ps))
 	{
 		cout<<"\nString is parsed\n";
 	}
@@ -457,10 +459,16 @@ bool parse(string input,vector<s_production> r_ps)
 	int ip = 0;
 	while(true)
 	{
-		// cout<<endl;
+		 cout<<endl;
 		// print(stk);
 		// cout<<endl;
 		// cout<<stk.top()<<" "<<l_ter_index[input_parts[ip]]<<endl;
+		//cout<<"\t\t";
+		for(int i=ip;i<input_parts.size();i++)
+		{
+		   cout<<input_parts[i];
+		}
+		cout<<"\t\t\t";
 		if(action_table[stk.top()][l_ter_index[input_parts[ip]]][0] == 'S' )
 		{
 			// case shift
@@ -468,7 +476,7 @@ bool parse(string input,vector<s_production> r_ps)
 			stk.push(l_ter_index[input_parts[ip]]);
 			stk.push(stoi(temp.substr(1,temp.length())));
 			ip++;
-			cout<<"\nShift";
+			cout<<"Shift";
 		}
 		else if (action_table[stk.top()][l_ter_index[input_parts[ip]]][0] == 'R' )
 		{
@@ -483,7 +491,7 @@ bool parse(string input,vector<s_production> r_ps)
 				stk.pop();
 				stk.pop();
 			}
-			cout<<endl;
+			//cout<<endl;
 			r_ps[i-1].print();
 			//cout<<endl;
 			int new_top_state = stk.top();

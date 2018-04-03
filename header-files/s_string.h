@@ -9,7 +9,7 @@ void reverse(char, int);
 char* itoa(int, char*, int);
 vector<string> to_vector( set<string>);
 string itos(int);
-//int stoi(string);
+int stoi(string);
 string remove_extra_spaces(string);
 set<string> merge_(set<string>,set<string>);
 void print(set<string>);
@@ -183,10 +183,10 @@ string itos(int num)
   return string(str);
 }
 
-// int stoi(string num)
-// {
-//   return atoi(num.c_str());
-// }
+ int stoi(string num)
+ {
+   return atoi(num.c_str());
+ }
 
 string remove_extra_spaces(string str)
 {

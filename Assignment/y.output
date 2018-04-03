@@ -1,0 +1,204 @@
+Grammar
+
+    0 $accept: stmts $end
+
+    1 stmts: stmt
+    2      | stmts stmt
+
+    3 stmt: decl
+    4     | while_loop
+    5     | var
+
+    6 while_loop: "while" "(" stmt ")" "{" stmts "}"
+
+    7 decl: data_type var ';'
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+';' (59) 7
+error (256)
+var (258) 5 7
+data_type (259) 7
+"while" (260) 6
+"(" (261) 6
+")" (262) 6
+"{" (263) 6
+"}" (264) 6
+
+
+Nonterminals, with rules where they appear
+
+$accept (11)
+    on left: 0
+stmts (12)
+    on left: 1 2, on right: 0 2 6
+stmt (13)
+    on left: 3 4 5, on right: 1 2 6
+while_loop (14)
+    on left: 6, on right: 4
+decl (15)
+    on left: 7, on right: 3
+
+
+State 0
+
+    0 $accept: . stmts $end
+
+    var        shift, and go to state 1
+    data_type  shift, and go to state 2
+    "while"    shift, and go to state 3
+
+    stmts       go to state 4
+    stmt        go to state 5
+    while_loop  go to state 6
+    decl        go to state 7
+
+
+State 1
+
+    5 stmt: var .
+
+    $default  reduce using rule 5 (stmt)
+
+
+State 2
+
+    7 decl: data_type . var ';'
+
+    var  shift, and go to state 8
+
+
+State 3
+
+    6 while_loop: "while" . "(" stmt ")" "{" stmts "}"
+
+    "("  shift, and go to state 9
+
+
+State 4
+
+    0 $accept: stmts . $end
+    2 stmts: stmts . stmt
+
+    $end       shift, and go to state 10
+    var        shift, and go to state 1
+    data_type  shift, and go to state 2
+    "while"    shift, and go to state 3
+
+    stmt        go to state 11
+    while_loop  go to state 6
+    decl        go to state 7
+
+
+State 5
+
+    1 stmts: stmt .
+
+    $default  reduce using rule 1 (stmts)
+
+
+State 6
+
+    4 stmt: while_loop .
+
+    $default  reduce using rule 4 (stmt)
+
+
+State 7
+
+    3 stmt: decl .
+
+    $default  reduce using rule 3 (stmt)
+
+
+State 8
+
+    7 decl: data_type var . ';'
+
+    ';'  shift, and go to state 12
+
+
+State 9
+
+    6 while_loop: "while" "(" . stmt ")" "{" stmts "}"
+
+    var        shift, and go to state 1
+    data_type  shift, and go to state 2
+    "while"    shift, and go to state 3
+
+    stmt        go to state 13
+    while_loop  go to state 6
+    decl        go to state 7
+
+
+State 10
+
+    0 $accept: stmts $end .
+
+    $default  accept
+
+
+State 11
+
+    2 stmts: stmts stmt .
+
+    $default  reduce using rule 2 (stmts)
+
+
+State 12
+
+    7 decl: data_type var ';' .
+
+    $default  reduce using rule 7 (decl)
+
+
+State 13
+
+    6 while_loop: "while" "(" stmt . ")" "{" stmts "}"
+
+    ")"  shift, and go to state 14
+
+
+State 14
+
+    6 while_loop: "while" "(" stmt ")" . "{" stmts "}"
+
+    "{"  shift, and go to state 15
+
+
+State 15
+
+    6 while_loop: "while" "(" stmt ")" "{" . stmts "}"
+
+    var        shift, and go to state 1
+    data_type  shift, and go to state 2
+    "while"    shift, and go to state 3
+
+    stmts       go to state 16
+    stmt        go to state 5
+    while_loop  go to state 6
+    decl        go to state 7
+
+
+State 16
+
+    2 stmts: stmts . stmt
+    6 while_loop: "while" "(" stmt ")" "{" stmts . "}"
+
+    var        shift, and go to state 1
+    data_type  shift, and go to state 2
+    "while"    shift, and go to state 3
+    "}"        shift, and go to state 17
+
+    stmt        go to state 11
+    while_loop  go to state 6
+    decl        go to state 7
+
+
+State 17
+
+    6 while_loop: "while" "(" stmt ")" "{" stmts "}" .
+
+    $default  reduce using rule 6 (while_loop)
