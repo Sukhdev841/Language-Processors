@@ -46,14 +46,20 @@ extern int yydebug;
   enum yytokentype
   {
     loop_while = 258,
-    var = 259,
-    data_type = 260
+    keyword_if = 259,
+    keyword_else = 260,
+    var = 261,
+    data_type = 262,
+    IFX = 263
   };
 #endif
 /* Tokens.  */
 #define loop_while 258
-#define var 259
-#define data_type 260
+#define keyword_if 259
+#define keyword_else 260
+#define var 261
+#define data_type 262
+#define IFX 263
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -64,7 +70,7 @@ union YYSTYPE
 
 	char *val;
 
-#line 68 "y.tab.h" /* yacc.c:1909  */
+#line 74 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

@@ -1,7 +1,6 @@
-int a;
-float b;
-while(b)
-{
-	int c;
-}
-int d;
+int b;
+if(b)
+	while(b)
+		b;
+else
+	int d;
