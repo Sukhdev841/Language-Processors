@@ -48,33 +48,87 @@ extern int yydebug;
     loop_while = 258,
     keyword_if = 259,
     keyword_else = 260,
-    var = 261,
-    data_type = 262,
-    binary_oper_per1 = 263,
-    binary_oper_per2 = 264,
-    IFX = 265
+    tok_int = 261,
+    tok_float = 262,
+    tok_double = 263,
+    tok_bool = 264,
+    tok_switch_stmt = 265,
+    tok_case = 266,
+    tok_default = 267,
+    tok_colon = 268,
+    tok_break = 269,
+    var = 270,
+    tok_num = 271,
+    binary_oper_per1 = 272,
+    binary_oper_per2 = 273,
+    tok_l_or = 274,
+    tok_l_and = 275,
+    tok_b_or = 276,
+    tok_b_xor = 277,
+    tok_b_and = 278,
+    tok_equal_to = 279,
+    tok_not_equal_to = 280,
+    tok_less_than = 281,
+    tok_less_eql = 282,
+    tok_greater_than = 283,
+    tok_greater_eql = 284,
+    tok_plus = 285,
+    tok_minus = 286,
+    tok_mul = 287,
+    tok_div = 288,
+    tok_mod = 289,
+    tok_b_not = 290,
+    tok_l_not = 291,
+    IFX = 292
   };
 #endif
 /* Tokens.  */
 #define loop_while 258
 #define keyword_if 259
 #define keyword_else 260
-#define var 261
-#define data_type 262
-#define binary_oper_per1 263
-#define binary_oper_per2 264
-#define IFX 265
+#define tok_int 261
+#define tok_float 262
+#define tok_double 263
+#define tok_bool 264
+#define tok_switch_stmt 265
+#define tok_case 266
+#define tok_default 267
+#define tok_colon 268
+#define tok_break 269
+#define var 270
+#define tok_num 271
+#define binary_oper_per1 272
+#define binary_oper_per2 273
+#define tok_l_or 274
+#define tok_l_and 275
+#define tok_b_or 276
+#define tok_b_xor 277
+#define tok_b_and 278
+#define tok_equal_to 279
+#define tok_not_equal_to 280
+#define tok_less_than 281
+#define tok_less_eql 282
+#define tok_greater_than 283
+#define tok_greater_eql 284
+#define tok_plus 285
+#define tok_minus 286
+#define tok_mul 287
+#define tok_div 288
+#define tok_mod 289
+#define tok_b_not 290
+#define tok_l_not 291
+#define IFX 292
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
 union YYSTYPE
 {
-#line 43 "parse.y" /* yacc.c:1909  */
+#line 64 "parse.y" /* yacc.c:1909  */
 
 	char *val;
 
-#line 78 "y.tab.h" /* yacc.c:1909  */
+#line 132 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

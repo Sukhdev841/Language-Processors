@@ -1,9 +1,22 @@
-int b;
-int c;
-int d;
 int a;
-int e;
+int b;
 
-b = b -a;
-c = a * b + e;
-e = a - d;
+if( a == b )
+{
+	while( a - b > 0)
+	{
+		a = b - 1;
+	}
+}
+else
+{
+	switch(a)
+	{
+		case b:
+				b = a - 5;
+				break;
+		case 1:
+				b = a - 1;
+				break;
+	}
+}
