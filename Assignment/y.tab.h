@@ -50,7 +50,9 @@ extern int yydebug;
     keyword_else = 260,
     var = 261,
     data_type = 262,
-    IFX = 263
+    binary_oper_per1 = 263,
+    binary_oper_per2 = 264,
+    IFX = 265
   };
 #endif
 /* Tokens.  */
@@ -59,18 +61,20 @@ extern int yydebug;
 #define keyword_else 260
 #define var 261
 #define data_type 262
-#define IFX 263
+#define binary_oper_per1 263
+#define binary_oper_per2 264
+#define IFX 265
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
 union YYSTYPE
 {
-#line 11 "parse.y" /* yacc.c:1909  */
+#line 43 "parse.y" /* yacc.c:1909  */
 
 	char *val;
 
-#line 74 "y.tab.h" /* yacc.c:1909  */
+#line 78 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

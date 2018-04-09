@@ -1,6 +1,9 @@
 int b;
-if(b)
-	while(b)
-		b;
-else
-	int d;
+int c;
+int d;
+int a;
+int e;
+
+b = b -a;
+c = a * b + e;
+e = a - d;
