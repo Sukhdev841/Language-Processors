@@ -11,14 +11,17 @@ void yyerror(const char* );
 "else"		{return keyword_else;}
 "while"		{return loop_while;}
 "int"		{return tok_int;}
-"float"		{return tok_float;}
-"double"	{return tok_double;}
+"uint"		{return tok_u_int;}
 "bool"		{return tok_bool;}
 "switch"	{return tok_switch_stmt;}
 "case"		{return tok_case;}
 "default"	{return tok_default;}
 "break"		{return tok_break;}
-[a-zA-Z]+ 	{yylval.val =(char*)malloc(yyleng); sprintf(yylval.val,"%s",yytext); return var;}
+
+"true"		{yylval.val =(char*)malloc(2); sprintf(yylval.val,"%d",1); return bool_init;}
+"false"		{yylval.val =(char*)malloc(2); sprintf(yylval.val,"%d",0); return bool_init;}
+
+[a-zA-Z][a-zA-Z0-9]* 	{yylval.val =(char*)malloc(yyleng); sprintf(yylval.val,"%s",yytext); return var;}
 [0-9]+		{yylval.val =(char*)malloc(yyleng); sprintf(yylval.val,"%s",yytext); return tok_num;}
 "{"|"}"|"("|")"|"=" {return yytext[0];}
 

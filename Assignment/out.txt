@@ -1,0 +1,44 @@
+declare a[int]
+a := 3
+L2:
+if a > 0 goto L0
+goto L1
+
+L0:
+t0 := a - 1
+
+a := t0
+
+goto L2
+L1:
+declare b[bool]
+if b == 1 goto L3
+goto L4
+
+L3:
+b := 0
+
+goto L5
+L4:
+b := 1
+
+L5:
+if a == 1 goto L6
+if a == 2 goto L7
+goto L8
+L6:
+a := 1
+
+goto L8
+L7:
+a := 2
+
+goto L8
+L8:
+declare c[int] = 10
+t1 := c * 3
+
+t2 := t1 - a
+
+a := t2
+

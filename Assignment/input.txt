@@ -1,22 +1,4 @@
-int a;
-int b;
-
-if( a == b )
-{
-	while( a - b > 0)
-	{
-		a = b - 1;
-	}
-}
-else
-{
-	switch(a)
-	{
-		case b:
-				b = a - 5;
-				break;
-		case 1:
-				b = a - 1;
-				break;
-	}
-}
+bool a;
+bool b;
+bool c;
+a = c && b;

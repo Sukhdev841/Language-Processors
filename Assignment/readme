@@ -1,0 +1,3 @@
+yacc -d parse.y
+lex scanner.l
+g++ lex.yy.c y.tab.c -o main

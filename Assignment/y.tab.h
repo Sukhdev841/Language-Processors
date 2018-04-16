@@ -49,18 +49,18 @@ extern int yydebug;
     keyword_if = 259,
     keyword_else = 260,
     tok_int = 261,
-    tok_float = 262,
-    tok_double = 263,
-    tok_bool = 264,
-    tok_switch_stmt = 265,
-    tok_case = 266,
-    tok_default = 267,
-    tok_colon = 268,
-    tok_break = 269,
-    var = 270,
-    tok_num = 271,
-    binary_oper_per1 = 272,
-    binary_oper_per2 = 273,
+    tok_u_int = 262,
+    tok_bool = 263,
+    tok_switch_stmt = 264,
+    tok_case = 265,
+    tok_default = 266,
+    tok_colon = 267,
+    tok_break = 268,
+    var = 269,
+    tok_num = 270,
+    binary_oper_per1 = 271,
+    binary_oper_per2 = 272,
+    bool_init = 273,
     tok_l_or = 274,
     tok_l_and = 275,
     tok_b_or = 276,
@@ -87,18 +87,18 @@ extern int yydebug;
 #define keyword_if 259
 #define keyword_else 260
 #define tok_int 261
-#define tok_float 262
-#define tok_double 263
-#define tok_bool 264
-#define tok_switch_stmt 265
-#define tok_case 266
-#define tok_default 267
-#define tok_colon 268
-#define tok_break 269
-#define var 270
-#define tok_num 271
-#define binary_oper_per1 272
-#define binary_oper_per2 273
+#define tok_u_int 262
+#define tok_bool 263
+#define tok_switch_stmt 264
+#define tok_case 265
+#define tok_default 266
+#define tok_colon 267
+#define tok_break 268
+#define var 269
+#define tok_num 270
+#define binary_oper_per1 271
+#define binary_oper_per2 272
+#define bool_init 273
 #define tok_l_or 274
 #define tok_l_and 275
 #define tok_b_or 276
@@ -124,7 +124,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 64 "parse.y" /* yacc.c:1909  */
+#line 208 "parse.y" /* yacc.c:1909  */
 
 	char *val;
 
